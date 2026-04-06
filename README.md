@@ -81,8 +81,10 @@ python Counseller_frontend.py
 ## 📸 Project Preview
 (Add your screenshot here)
 ```
-![App Screenshot](screenshot.png)
+<img width="1895" height="915" alt="Screenshot 2026-04-06 234235" src="https://github.com/user-attachments/assets/8dec9543-3c48-46fc-91ec-099b346bce40" />
+
 ```
+<img width="1877" height="901" alt="Screenshot 2026-04-06 235321" src="https://github.com/user-attachments/assets/d063edd2-55e2-4d76-9494-8048bb8e6351" />
 
 ---
 
