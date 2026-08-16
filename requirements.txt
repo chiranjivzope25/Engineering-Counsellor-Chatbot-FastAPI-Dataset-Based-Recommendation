@@ -1,0 +1,5 @@
+fastapi
+pydantic
+pandas
+transformers
+torch
