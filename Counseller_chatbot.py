@@ -1,12 +1,14 @@
 
 import pandas as pd
 import re
-from transformers import pipeline
 
 dataset = pd.read_csv(r"C:\Users\CHIRNAJIV ZOPE\Downloads\real_cutoff_dataset.csv")
 dataset.head()
 
-generator=pipeline("text-generation",model='TinyLlama/TinyLlama-1.1B-Chat-v1.0')
+generator = pipeline(
+    "text-generation",
+    model="TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+)
 
 def college_recomender(percentile,branch,location):
   filtered=dataset[
