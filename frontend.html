@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="sunrise">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chirag Counseller — Your Admission Buddy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===================== THEME TOKENS ===================== */
+  :root{
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow-soft: 0 16px 40px rgba(30,20,60,0.10);
+    --shadow-pop: 0 10px 24px rgba(30,20,60,0.16);
+  }
+
+  html[data-theme="sunrise"]{
+    --bg:#FFF7ED; --bg2:#FFEFDD;
+    --card: rgba(255,255,255,0.72);
+    --card-solid:#FFFFFF;
+    --card-border: rgba(120,60,20,0.10);
+    --text:#2B2013; --muted:#8A7157; --muted-2:#B79E82;
+    --accent1:#FF6B35; --accent2:#FF3D77; --accent3:#FFB238;
+    --accent1-soft: rgba(255,107,53,0.14);
+    --accent2-soft: rgba(255,61,119,0.14);
+    --accent3-soft: rgba(255,178,56,0.16);
+    --grad: linear-gradient(120deg, #FF6B35, #FF3D77);
+    --blob1:#FFD1A1; --blob2:#FFB5C7; --blob3:#FFE08A;
+    --safe:#1FAE7E; --safe-soft: rgba(31,174,126,0.14);
+    --target:#FF9F1C; --target-soft: rgba(255,159,28,0.16);
+    --dream:#FF3D77; --dream-soft: rgba(255,61,119,0.14);
+  }
+
+  html[data-theme="ocean"]{
+    --bg:#EFFAFC; --bg2:#E3F5FA;
+    --card: rgba(255,255,255,0.72);
+    --card-solid:#FFFFFF;
+    --card-border: rgba(10,80,100,0.10);
+    --text:#0E2A34; --muted:#5C8A96; --muted-2:#9AC0C9;
+    --accent1:#0EA5C0; --accent2:#5B6EF5; --accent3:#22D3C0;
+    --accent1-soft: rgba(14,165,192,0.14);
+    --accent2-soft: rgba(91,110,245,0.14);
+    --accent3-soft: rgba(34,211,192,0.16);
+    --grad: linear-gradient(120deg, #0EA5C0, #5B6EF5);
+    --blob1:#AEE6F0; --blob2:#C6CDFB; --blob3:#9DEFDF;
+    --safe:#12B886; --safe-soft: rgba(18,184,134,0.14);
+    --target:#F5A524; --target-soft: rgba(245,165,36,0.16);
+    --dream:#5B6EF5; --dream-soft: rgba(91,110,245,0.14);
+  }
+
+  html[data-theme="aurora"]{
+    --bg:#130E24; --bg2:#180F2E;
+    --card: rgba(255,255,255,0.06);
+    --card-solid:#1C1533;
+    --card-border: rgba(255,255,255,0.09);
+    --text:#F1EEFB; --muted:#A79DC7; --muted-2:#6E6390;
+    --accent1:#B26BFF; --accent2:#FF6FB5; --accent3:#5DE0E6;
+    --accent1-soft: rgba(178,107,255,0.18);
+    --accent2-soft: rgba(255,111,181,0.16);
+    --accent3-soft: rgba(93,224,230,0.16);
+    --grad: linear-gradient(120deg, #B26BFF, #FF6FB5);
+    --blob1:#3B2166; --blob2:#5A1E4A; --blob3:#123B4A;
+    --safe:#3DDC97; --safe-soft: rgba(61,220,151,0.16);
+    --target:#FFC857; --target-soft: rgba(255,200,87,0.16);
+    --dream:#FF6FB5; --dream-soft: rgba(255,111,181,0.16);
+  }
+
+  html[data-theme="forest"]{
+    --bg:#F3FBF1; --bg2:#E9F7E4;
+    --card: rgba(255,255,255,0.75);
+    --card-solid:#FFFFFF;
+    --card-border: rgba(30,90,40,0.10);
+    --text:#1C2E1A; --muted:#6C8A63; --muted-2:#A2C093;
+    --accent1:#3FA34D; --accent2:#0EA37A; --accent3:#B4D444;
+    --accent1-soft: rgba(63,163,77,0.14);
+    --accent2-soft: rgba(14,163,122,0.14);
+    --accent3-soft: rgba(180,212,68,0.18);
+    --grad: linear-gradient(120deg, #3FA34D, #0EA37A);
+    --blob1:#C9EBC2; --blob2:#B8E4CE; --blob3:#E4EFA0;
+    --safe:#0EA37A; --safe-soft: rgba(14,163,122,0.14);
+    --target:#E0A429; --target-soft: rgba(224,164,41,0.16);
+    --dream:#E85D75; --dream-soft: rgba(232,93,117,0.14);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color:var(--text);
+    font-family:'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition: background .4s ease, color .4s ease;
+    overflow:hidden;
+  }
+
+  ::selection{ background: var(--accent1-soft); }
+  button, input, select, textarea{ font-family:inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--accent1); outline-offset:2px;
+  }
+
+  /* ---------- animated blob backdrop ---------- */
+  .blob-field{
+    position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+  }
+  .blob{
+    position:absolute; border-radius:50%;
+    filter: blur(60px);
+    opacity:0.65;
+    transition: background .4s ease;
+  }
+  .blob.b1{ width:420px; height:420px; background:var(--blob1); top:-120px; left:-100px; animation: float1 22s ease-in-out infinite; }
+  .blob.b2{ width:380px; height:380px; background:var(--blob2); bottom:-140px; right:-80px; animation: float2 26s ease-in-out infinite; }
+  .blob.b3{ width:300px; height:300px; background:var(--blob3); bottom:20%; left:38%; animation: float3 19s ease-in-out infinite; }
+
+  @keyframes float1{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(60px,40px) scale(1.08);} }
+  @keyframes float2{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(-50px,-30px) scale(1.1);} }
+  @keyframes float3{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(30px,-50px) scale(0.92);} }
+
+  @media (prefers-reduced-motion: reduce){
+    .blob{ animation:none !important; }
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+
+  .app{
+    position:relative; z-index:1;
+    display:grid;
+    grid-template-columns: 322px 1fr;
+    height:100vh;
+  }
+
+  /* ===================== SIDEBAR ===================== */
+  .sidebar{
+    display:flex; flex-direction:column;
+    height:100vh; overflow-y:auto;
+    padding:22px 18px 18px;
+    background: var(--card);
+    backdrop-filter: blur(18px);
+    border-right:1px solid var(--card-border);
+  }
+  .sidebar::-webkit-scrollbar{ width:8px; }
+  .sidebar::-webkit-scrollbar-thumb{ background:var(--card-border); border-radius:8px; }
+
+  .brand{ display:flex; align-items:center; gap:11px; margin-bottom:18px; }
+  .brand-mark{
+    width:42px; height:42px; border-radius:14px;
+    background: var(--grad);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Poppins'; font-weight:800; color:#fff; font-size:19px;
+    box-shadow: var(--shadow-pop);
+    flex-shrink:0;
+  }
+  .brand-text h1{ font-family:'Poppins'; font-size:17px; font-weight:700; margin:0; }
+  .brand-text p{ margin:1px 0 0; font-size:11px; color:var(--muted); }
+
+  /* theme switcher */
+  .theme-row{ display:flex; gap:8px; margin-bottom:20px; }
+  .theme-swatch{
+    width:34px; height:34px; border-radius:11px;
+    border:2px solid transparent;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .15s ease, border-color .15s ease;
+    flex-shrink:0;
+    position:relative;
+  }
+  .theme-swatch:hover{ transform: translateY(-2px) scale(1.05); }
+  .theme-swatch.active{ border-color: var(--text); }
+  .theme-swatch.active::after{
+    content:'✓'; position:absolute; color:#fff; font-size:13px; font-weight:700;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .sw-sunrise{ background: linear-gradient(135deg,#FF6B35,#FF3D77); }
+  .sw-ocean{ background: linear-gradient(135deg,#0EA5C0,#5B6EF5); }
+  .sw-aurora{ background: linear-gradient(135deg,#B26BFF,#FF6FB5); }
+  .sw-forest{ background: linear-gradient(135deg,#3FA34D,#0EA37A); }
+
+  .new-chat-btn{
+    width:100%; border:none; border-radius:14px; padding:12px 14px;
+    background: var(--grad); color:#fff;
+    font-weight:700; font-size:13.5px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow: var(--shadow-pop);
+    transition: transform .15s ease, filter .15s ease;
+    margin-bottom:18px;
+  }
+  .new-chat-btn:hover{ transform: translateY(-2px); filter:brightness(1.06); }
+
+  .side-section{ margin-bottom:18px; }
+  .side-label{
+    font-size:10.5px; letter-spacing:1.1px; text-transform:uppercase;
+    color:var(--muted-2); font-weight:700; margin:0 0 10px 2px;
+  }
+
+  .finder-card{
+    background: var(--card-solid);
+    border:1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding:16px;
+    box-shadow: var(--shadow-soft);
+  }
+  .field{ margin-bottom:11px; }
+  .field:last-child{ margin-bottom:0; }
+  .field label{ display:block; font-size:11px; color:var(--muted); margin-bottom:5px; font-weight:600; }
+  .field input, .field select{
+    width:100%; background: var(--bg2);
+    border:1.5px solid var(--card-border); color:var(--text);
+    border-radius:10px; padding:9px 11px; font-size:13px;
+    font-family:'JetBrains Mono', monospace;
+    transition:border-color .15s ease;
+  }
+  .field select{ font-family:'Inter'; cursor:pointer; }
+  .field input:focus, .field select:focus{ border-color: var(--accent1); outline:none; }
+
+  .meter-wrap{ display:flex; flex-direction:column; align-items:center; padding:4px 0 8px; }
+  .meter-value{ font-family:'JetBrains Mono', monospace; font-size:25px; font-weight:700; color:var(--accent1); margin-top:-36px; }
+  .meter-caption{ font-size:10px; color:var(--muted-2); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+
+  .find-btn{
+    width:100%; margin-top:13px; border:none; border-radius:10px; padding:10px 10px;
+    background: var(--grad); color:#fff; font-weight:700; font-size:12.5px; cursor:pointer;
+    box-shadow: var(--shadow-pop);
+    transition: transform .15s ease;
+  }
+  .find-btn:hover{ transform: translateY(-1px); }
+
+  .history-list{ display:flex; flex-direction:column; gap:4px; }
+  .history-item{
+    display:flex; align-items:center; gap:9px;
+    padding:9px 11px; border-radius:10px; cursor:pointer;
+    color:var(--muted); font-size:13px; font-weight:500;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    transition: background .12s ease, color .12s ease;
+  }
+  .history-item:hover{ background: var(--accent1-soft); color:var(--text); }
+  .history-item.active{ background: var(--accent1-soft); color:var(--text); }
+  .history-dot{ width:7px; height:7px; border-radius:50%; background: var(--grad); flex-shrink:0; opacity:.4; }
+  .history-item.active .history-dot{ opacity:1; }
+  .history-empty{ color:var(--muted-2); font-size:12.5px; padding:6px 2px; }
+
+  .sidebar-footer{ margin-top:auto; padding-top:16px; border-top:1px solid var(--card-border); }
+  .conn-row{ display:flex; align-items:center; gap:8px; margin-bottom:9px; }
+  .conn-dot{ width:8px; height:8px; border-radius:50%; background: var(--muted-2); transition: all .2s ease; }
+  .conn-dot.ok{ background: var(--safe); box-shadow:0 0 0 3px var(--safe-soft); }
+  .conn-dot.bad{ background: var(--dream); box-shadow:0 0 0 3px var(--dream-soft); }
+  .conn-text{ font-size:11.5px; color:var(--muted); }
+  .conn-input-row{ display:flex; gap:6px; }
+  .conn-input-row input{
+    flex:1; background: var(--bg2); border:1.5px solid var(--card-border); color:var(--text);
+    border-radius:9px; padding:8px 9px; font-size:11.5px; font-family:'JetBrains Mono', monospace;
+  }
+  .conn-input-row input:focus{ border-color:var(--accent1); outline:none; }
+  .conn-save{
+    background: var(--accent1-soft); border:1.5px solid transparent; color:var(--accent1);
+    border-radius:9px; padding:0 12px; font-size:11px; font-weight:700; cursor:pointer;
+  }
+  .conn-save:hover{ filter:brightness(0.95); }
+
+  /* ===================== MAIN ===================== */
+  .main{ display:flex; flex-direction:column; height:100vh; overflow:hidden; position:relative; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 30px; border-bottom:1px solid var(--card-border);
+    background: var(--card); backdrop-filter: blur(14px);
+  }
+  .topbar-left h2{ font-family:'Poppins'; font-size:19px; font-weight:700; margin:0; }
+  .topbar-left p{ margin:3px 0 0; font-size:12.5px; color:var(--muted); }
+  .topbar-right{ display:flex; gap:8px; }
+  .chip{
+    font-size:11px; padding:6px 12px; border-radius:999px; font-weight:600;
+    background: var(--accent3-soft); color:var(--text); border:1px solid var(--card-border);
+  }
+
+  .chat-scroll{ flex:1; overflow-y:auto; padding:30px 0 10px; }
+  .chat-scroll::-webkit-scrollbar{ width:9px; }
+  .chat-scroll::-webkit-scrollbar-thumb{ background:var(--card-border); border-radius:8px; }
+  .chat-inner{ max-width:760px; margin:0 auto; padding:0 30px; display:flex; flex-direction:column; gap:22px; }
+
+  .welcome{ text-align:center; padding:56px 20px 30px; }
+  .welcome-mark{
+    width:60px; height:60px; margin:0 auto 18px; border-radius:20px;
+    background: var(--grad); display:flex; align-items:center; justify-content:center;
+    font-family:'Poppins'; font-weight:800; color:#fff; font-size:26px;
+    box-shadow: var(--shadow-pop);
+    animation: pop 1.6s ease-in-out infinite;
+  }
+  @keyframes pop{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.05); } }
+  .welcome h3{ font-family:'Poppins'; font-size:24px; font-weight:700; margin:0 0 8px; }
+  .welcome p{ color:var(--muted); font-size:14px; max-width:420px; margin:0 auto 22px; line-height:1.6; }
+  .example-row{ display:flex; gap:9px; flex-wrap:wrap; justify-content:center; }
+  .example-chip{
+    font-size:12px; padding:9px 15px; border-radius:12px;
+    background: var(--card-solid); color:var(--text); border:1.5px solid var(--card-border);
+    cursor:pointer; font-family:'JetBrains Mono', monospace; font-weight:500;
+    transition: border-color .15s ease, transform .15s ease, background .15s ease;
+    box-shadow: var(--shadow-soft);
+  }
+  .example-chip:hover{ border-color: var(--accent1); transform: translateY(-2px); background: var(--accent1-soft); }
+
+  .msg-row{ display:flex; gap:12px; align-items:flex-start; }
+  .msg-row.user{ flex-direction:row-reverse; }
+  .avatar{
+    width:34px; height:34px; border-radius:11px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:800; font-family:'Poppins'; margin-top:2px;
+    color:#fff;
+  }
+  .avatar.bot{ background: var(--grad); box-shadow: var(--shadow-pop); }
+  .avatar.user{ background: var(--muted-2); }
+
+  .bubble{
+    max-width:78%; padding:14px 17px; border-radius:16px;
+    font-size:14.5px; line-height:1.65; white-space:pre-wrap;
+    box-shadow: var(--shadow-soft);
+  }
+  .msg-row.bot .bubble{ background: var(--card-solid); border:1px solid var(--card-border); border-top-left-radius:5px; }
+  .msg-row.user .bubble{ background: var(--grad); color:#fff; border-top-right-radius:5px; }
+
+  .typing{ display:flex; gap:4px; padding:4px 2px; }
+  .typing span{ width:6px; height:6px; border-radius:50%; background:var(--muted); animation: blink 1.3s infinite ease-in-out; }
+  .typing span:nth-child(2){ animation-delay:.15s; }
+  .typing span:nth-child(3){ animation-delay:.3s; }
+  @keyframes blink{ 0%,80%,100%{opacity:.25;} 40%{opacity:1;} }
+
+  .result-set{ display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+  .result-head{ font-size:12px; color:var(--muted); margin-bottom:2px; }
+  .result-head b{ color:var(--text); }
+  .tier{
+    border:1px solid var(--card-border); border-radius:13px; padding:12px 14px;
+    background: var(--bg2);
+  }
+  .tier.dream{ box-shadow: inset 3px 0 0 var(--dream); }
+  .tier.target{ box-shadow: inset 3px 0 0 var(--target); }
+  .tier.safe{ box-shadow: inset 3px 0 0 var(--safe); }
+  .tier-label{ display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:7px; }
+  .tier.dream .tier-label{ color:var(--dream); }
+  .tier.target .tier-label{ color:var(--target); }
+  .tier.safe .tier-label{ color:var(--safe); }
+  .tier-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; border-top:1px solid var(--card-border); }
+  .tier-row:first-of-type{ border-top:none; padding-top:0; }
+  .tier-college{ color:var(--text); font-weight:500; }
+  .tier-pct{ font-family:'JetBrains Mono', monospace; color:var(--muted); font-size:12.5px; }
+  .tier-none{ color:var(--muted-2); font-size:12.5px; font-style:italic; }
+
+  .composer{ padding:16px 30px 24px; }
+  .composer-inner{
+    max-width:760px; margin:0 auto; display:flex; align-items:flex-end; gap:10px;
+    background: var(--card-solid); border:1.5px solid var(--card-border);
+    border-radius:18px; padding:9px 9px 9px 17px;
+    box-shadow: var(--shadow-soft);
+    transition: border-color .15s ease;
+  }
+  .composer-inner:focus-within{ border-color: var(--accent1); }
+  .composer-inner textarea{
+    flex:1; background:transparent; border:none; color:var(--text);
+    font-size:14px; resize:none; max-height:140px; padding:8px 0; line-height:1.5;
+  }
+  .composer-inner textarea:focus{ outline:none; }
+  .composer-inner textarea::placeholder{ color:var(--muted-2); }
+
+  .send-btn{
+    width:40px; height:40px; border-radius:12px; border:none;
+    background: var(--grad); color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    box-shadow: var(--shadow-pop);
+    transition: transform .12s ease, opacity .12s ease;
+  }
+  .send-btn:hover{ transform: translateY(-1px) scale(1.03); }
+  .send-btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
+
+  .composer-hint{ max-width:760px; margin:8px auto 0; font-size:11px; color:var(--muted-2); text-align:center; }
+  .composer-hint code{ background: var(--card-solid); border:1px solid var(--card-border); padding:1px 6px; border-radius:5px; font-family:'JetBrains Mono', monospace; color:var(--muted); }
+
+  @media (max-width: 880px){
+    .app{ grid-template-columns: 1fr; }
+    .sidebar{ position:fixed; z-index:20; width:290px; box-shadow: var(--shadow-pop); }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob-field">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">C</div>
+      <div class="brand-text">
+        <h1>Chirag Counseller</h1>
+        <p>Your admission buddy</p>
+      </div>
+    </div>
+
+    <div class="theme-row" id="themeRow">
+      <button class="theme-swatch sw-sunrise active" data-theme="sunrise" title="Sunrise" aria-label="Sunrise theme"></button>
+      <button class="theme-swatch sw-ocean" data-theme="ocean" title="Ocean" aria-label="Ocean theme"></button>
+      <button class="theme-swatch sw-aurora" data-theme="aurora" title="Aurora" aria-label="Aurora theme"></button>
+      <button class="theme-swatch sw-forest" data-theme="forest" title="Forest" aria-label="Forest theme"></button>
+    </div>
+
+    <button class="new-chat-btn" id="newChatBtn"><span>＋</span> New conversation</button>
+
+    <div class="side-section">
+      <p class="side-label">Quick finder</p>
+      <div class="finder-card">
+        <div class="meter-wrap">
+          <svg width="150" height="86" viewBox="0 0 150 86">
+            <path d="M 11 79 A 64 64 0 0 1 139 79" fill="none" stroke-opacity="0.14" stroke="currentColor" stroke-width="10" stroke-linecap="round" style="color:var(--muted-2)"/>
+            <path id="gaugeArc" d="M 11 79 A 64 64 0 0 1 139 79" fill="none" stroke="url(#gaugeGrad)" stroke-width="10" stroke-linecap="round"
+                  stroke-dasharray="201.06" stroke-dashoffset="201.06"/>
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop id="gStop1" offset="0%" stop-color="var(--safe)"/>
+                <stop id="gStop2" offset="55%" stop-color="var(--target)"/>
+                <stop id="gStop3" offset="100%" stop-color="var(--dream)"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="meter-value" id="gaugeValue">--</div>
+          <div class="meter-caption">Percentile</div>
+        </div>
+
+        <div class="field">
+          <label for="fPercentile">Percentile</label>
+          <input type="number" id="fPercentile" placeholder="e.g. 92.5" min="0" max="100" step="0.01"/>
+        </div>
+        <div class="field">
+          <label for="fBranch">Branch</label>
+          <select id="fBranch">
+            <option value="">Select branch</option>
+            <option>Civil Engineering</option>
+            <option>Computer Engineering</option>
+            <option>Electrical Engineering</option>
+            <option>Electronics Engineering</option>
+            <option>IT</option>
+            <option>Mechanical Engineering</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fLocation">Location</label>
+          <select id="fLocation">
+            <option value="">Select city</option>
+            <option>Amravati</option>
+            <option>Aurangabad</option>
+            <option>Kolhapur</option>
+            <option>Mumbai</option>
+            <option>Nagpur</option>
+            <option>Nashik</option>
+            <option>Pune</option>
+            <option>Sangli</option>
+          </select>
+        </div>
+        <button class="find-btn" id="findBtn">Find my colleges</button>
+      </div>
+    </div>
+
+    <div class="side-section" style="flex:1; min-height:0;">
+      <p class="side-label">History</p>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">No conversations yet</div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="conn-row">
+        <span class="conn-dot" id="connDot"></span>
+        <span class="conn-text" id="connText">Not connected</span>
+      </div>
+      <div class="conn-input-row">
+        <input type="text" id="backendUrl" value="http://127.0.0.1:8000/chat" spellcheck="false"/>
+        <button class="conn-save" id="connSaveBtn">Test</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2>Hey, I'm Chirag 👋</h2>
+        <p>Tell me your percentile and I'll find where you fit best</p>
+      </div>
+      <div class="topbar-right">
+        <span class="chip">6 branches</span>
+        <span class="chip">8 cities</span>
+      </div>
+    </div>
+
+    <div class="chat-scroll" id="chatScroll">
+      <div class="chat-inner" id="chatInner">
+        <div class="welcome" id="welcomeState">
+          <div class="welcome-mark">C</div>
+          <h3>Let's find your college!</h3>
+          <p>Share your MHT-CET percentile, branch and city — I'll sort your options into Dream, Target and Safe.</p>
+          <div class="example-row">
+            <span class="example-chip" data-fill="92.5, Computer Engineering, Pune">92.5, Computer Engineering, Pune</span>
+            <span class="example-chip" data-fill="85, IT, Mumbai">85, IT, Mumbai</span>
+            <span class="example-chip" data-fill="78.4, Mechanical Engineering, Nagpur">78.4, Mechanical Engineering, Nagpur</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="composer-inner">
+        <textarea id="messageInput" rows="1" placeholder="Type: percentile, branch, location — e.g. 92.5, Computer Engineering, Pune"></textarea>
+        <button class="send-btn" id="sendBtn" aria-label="Send message">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12L20 4L14 20L11 13L4 12Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <p class="composer-hint">Format: <code>percentile, branch, location</code> · backend endpoint set in the sidebar</p>
+    </div>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  const chatScroll   = document.getElementById('chatScroll');
+  const chatInner    = document.getElementById('chatInner');
+  const welcomeState = document.getElementById('welcomeState');
+  const messageInput = document.getElementById('messageInput');
+  const sendBtn      = document.getElementById('sendBtn');
+  const newChatBtn   = document.getElementById('newChatBtn');
+  const historyList  = document.getElementById('historyList');
+  const backendUrlEl = document.getElementById('backendUrl');
+  const connSaveBtn  = document.getElementById('connSaveBtn');
+  const connDot      = document.getElementById('connDot');
+  const connText     = document.getElementById('connText');
+
+  const fPercentile  = document.getElementById('fPercentile');
+  const fBranch      = document.getElementById('fBranch');
+  const fLocation    = document.getElementById('fLocation');
+  const findBtn      = document.getElementById('findBtn');
+  const gaugeArc      = document.getElementById('gaugeArc');
+  const gaugeValue    = document.getElementById('gaugeValue');
+  const themeRow      = document.getElementById('themeRow');
+
+  const ARC_LEN = 201.06;
+
+  // ---------- theme switching ----------
+  themeRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-swatch');
+    if(!btn) return;
+    document.documentElement.setAttribute('data-theme', btn.dataset.theme);
+    themeRow.querySelectorAll('.theme-swatch').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+  });
+
+  // ---------- state ----------
+  let conversations = [];
+  let activeConvoId  = null;
+
+  function newConversation(){
+    const convo = { id: Date.now(), title: 'New conversation', messages: [] };
+    conversations.unshift(convo);
+    activeConvoId = convo.id;
+    renderHistory();
+    renderChat();
+  }
+  function getActive(){ return conversations.find(c => c.id === activeConvoId); }
+
+  function renderHistory(){
+    if(conversations.length === 0){
+      historyList.innerHTML = '<div class="history-empty">No conversations yet</div>';
+      return;
+    }
+    historyList.innerHTML = '';
+    conversations.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'history-item' + (c.id === activeConvoId ? ' active' : '');
+      el.innerHTML = `<span class="history-dot"></span><span>${escapeHtml(c.title)}</span>`;
+      el.addEventListener('click', () => { activeConvoId = c.id; renderHistory(); renderChat(); });
+      historyList.appendChild(el);
+    });
+  }
+
+  function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+  function renderChat(){
+    const convo = getActive();
+    chatInner.innerHTML = '';
+    if(!convo || convo.messages.length === 0){ chatInner.appendChild(welcomeState); return; }
+    convo.messages.forEach(m => appendMessageEl(m.role, m.text, false));
+    scrollToBottom();
+  }
+  function scrollToBottom(){ chatScroll.scrollTop = chatScroll.scrollHeight; }
+
+  function tryRenderResultCard(text){
+    if(!/Dream-/.test(text) || !/Target-/.test(text) || !/Safe-/.test(text)) return null;
+
+    const headMatch = text.match(/percentile-([\d.]+).*?(?:location|city)-([A-Za-z ]+?)\s*[\r\n]/is);
+    const branchMatch = text.match(/branch-([A-Za-z ]+?)\s*your colleges/is);
+
+    function extractTier(label, stopLabels){
+      const stopPattern = stopLabels.map(s => s + '-').join('|');
+      const re = new RegExp(label + '-([\\s\\S]*?)(?:' + stopPattern + '|$)', 'i');
+      const m = text.match(re);
+      return m ? m[1].trim() : '';
+    }
+    const dreamBlock  = extractTier('Dream', ['Target','Safe']);
+    const targetBlock = extractTier('Target', ['Safe']);
+    const safeBlock   = extractTier('Safe', ['$^']);
+
+    function parseRows(block){
+      if(!block || /^none$/i.test(block.trim())) return [];
+      return block.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+        const m = line.match(/^-?\s*(.+?)\((.+?)\)\s*$/);
+        if(m) return { college: m[1].trim(), pct: m[2].trim() };
+        return { college: line.replace(/^-/,'').trim(), pct: '' };
+      });
+    }
+    const dream  = parseRows(dreamBlock);
+    const target = parseRows(targetBlock);
+    const safe   = parseRows(safeBlock);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'result-set';
+
+    if(headMatch || branchMatch){
+      const head = document.createElement('div');
+      head.className = 'result-head';
+      const pct = headMatch ? headMatch[1] : '';
+      const loc = headMatch ? headMatch[2].trim() : '';
+      const br  = branchMatch ? branchMatch[1].trim() : '';
+      head.innerHTML = `Matches for <b>${escapeHtml(pct)} percentile</b>` + (br ? ` · <b>${escapeHtml(br)}</b>` : '') + (loc ? ` · <b>${escapeHtml(loc)}</b>` : '');
+      wrap.appendChild(head);
+    }
+
+    function buildTier(label, cssClass, rows){
+      const tier = document.createElement('div');
+      tier.className = 'tier ' + cssClass;
+      const lab = document.createElement('div');
+      lab.className = 'tier-label';
+      lab.textContent = label;
+      tier.appendChild(lab);
+      if(rows.length === 0){
+        const none = document.createElement('div');
+        none.className = 'tier-none';
+        none.textContent = 'No colleges in this range';
+        tier.appendChild(none);
+      } else {
+        rows.forEach(r => {
+          const row = document.createElement('div');
+          row.className = 'tier-row';
+          row.innerHTML = `<span class="tier-college">${escapeHtml(r.college)}</span><span class="tier-pct">${escapeHtml(r.pct)}</span>`;
+          tier.appendChild(row);
+        });
+      }
+      return tier;
+    }
+
+    wrap.appendChild(buildTier('Dream', 'dream', dream));
+    wrap.appendChild(buildTier('Target', 'target', target));
+    wrap.appendChild(buildTier('Safe', 'safe', safe));
+    return wrap;
+  }
+
+  function appendMessageEl(role, text, animate){
+    if(welcomeState.parentElement) welcomeState.remove();
+    const row = document.createElement('div');
+    row.className = 'msg-row ' + role;
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar ' + role;
+    avatar.textContent = role === 'bot' ? 'C' : 'Y';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    if(role === 'bot'){
+      const card = tryRenderResultCard(text);
+      if(card){ bubble.appendChild(card); } else { bubble.textContent = text; }
+    } else { bubble.textContent = text; }
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    chatInner.appendChild(row);
+    if(animate) scrollToBottom();
+    return row;
+  }
+
+  function appendTyping(){
+    const row = document.createElement('div');
+    row.className = 'msg-row bot';
+    row.id = 'typingRow';
+    row.innerHTML = `<div class="avatar bot">C</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    chatInner.appendChild(row);
+    scrollToBottom();
+  }
+  function removeTyping(){ const el = document.getElementById('typingRow'); if(el) el.remove(); }
+
+  async function sendMessage(text){
+    text = text.trim();
+    if(!text) return;
+    if(!activeConvoId) newConversation();
+    const convo = getActive();
+    if(convo.messages.length === 0){
+      convo.title = text.length > 34 ? text.slice(0,34) + '…' : text;
+      renderHistory();
+    }
+    convo.messages.push({ role:'user', text });
+    appendMessageEl('user', text, true);
+    messageInput.value = '';
+    autoGrow();
+    appendTyping();
+    sendBtn.disabled = true;
+
+    try{
+      const url = backendUrlEl.value.trim();
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      if(!res.ok) throw new Error('Server responded ' + res.status);
+      const data = await res.json();
+      const reply = data.reply ?? 'No reply received.';
+      removeTyping();
+      convo.messages.push({ role:'bot', text: reply });
+      appendMessageEl('bot', reply, true);
+      setConnStatus(true);
+    } catch(err){
+      removeTyping();
+      const msg = `Couldn't reach the backend at ${backendUrlEl.value.trim()}.\n(${err.message})\n\nCheck that your FastAPI server is running and the URL in the sidebar is correct.`;
+      convo.messages.push({ role:'bot', text: msg });
+      appendMessageEl('bot', msg, true);
+      setConnStatus(false);
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+
+  function setConnStatus(ok){
+    connDot.classList.remove('ok','bad');
+    connDot.classList.add(ok ? 'ok' : 'bad');
+    connText.textContent = ok ? 'Connected' : 'Connection failed';
+  }
+
+  async function testConnection(){
+    const url = backendUrlEl.value.trim().replace(/\/chat\/?$/, '/');
+    connText.textContent = 'Testing…';
+    connDot.classList.remove('ok','bad');
+    try{
+      const res = await fetch(url || backendUrlEl.value.trim());
+      if(res.ok){ setConnStatus(true); } else { setConnStatus(false); }
+    } catch(e){ setConnStatus(false); }
+  }
+
+  function updateGauge(){
+    const v = parseFloat(fPercentile.value);
+    if(isNaN(v)){ gaugeArc.style.strokeDashoffset = ARC_LEN; gaugeValue.textContent = '--'; return; }
+    const clamped = Math.max(0, Math.min(100, v));
+    const offset = ARC_LEN * (1 - clamped/100);
+    gaugeArc.style.transition = 'stroke-dashoffset .35s ease';
+    gaugeArc.style.strokeDashoffset = offset;
+    gaugeValue.textContent = clamped.toFixed(1);
+  }
+
+  function autoGrow(){
+    messageInput.style.height = 'auto';
+    messageInput.style.height = Math.min(messageInput.scrollHeight, 140) + 'px';
+  }
+
+  sendBtn.addEventListener('click', () => sendMessage(messageInput.value));
+  messageInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(messageInput.value); }
+  });
+  messageInput.addEventListener('input', autoGrow);
+  newChatBtn.addEventListener('click', newConversation);
+  document.querySelectorAll('.example-chip').forEach(chip => {
+    chip.addEventListener('click', () => { messageInput.value = chip.dataset.fill; autoGrow(); messageInput.focus(); });
+  });
+  fPercentile.addEventListener('input', updateGauge);
+  findBtn.addEventListener('click', () => {
+    const p = fPercentile.value.trim();
+    const b = fBranch.value;
+    const l = fLocation.value;
+    if(!p || !b || !l){
+      fPercentile.style.borderColor = p ? 'var(--card-border)' : 'var(--dream)';
+      fBranch.style.borderColor = b ? 'var(--card-border)' : 'var(--dream)';
+      fLocation.style.borderColor = l ? 'var(--card-border)' : 'var(--dream)';
+      return;
+    }
+    sendMessage(`${p}, ${b}, ${l}`);
+  });
+  connSaveBtn.addEventListener('click', testConnection);
+
+  newConversation();
+  updateGauge();s
+})();
+</script>
+
+</body>
+</html>
